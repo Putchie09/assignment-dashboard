@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Student {
+  id            Int      @id @default(autoincrement())
+  username      String   @unique
+  email         String   @unique
+  password_hash String
+  created_at    DateTime @default(now())
+
+  courses Course[]
+  types   AssignmentType[]
+}
+
+model Course {
+  id         Int      @id @default(autoincrement())
+  student_id Int
+  name       String
+  is_active  Boolean  @default(true)
+  created_at DateTime @default(now())
+
+  student     Student      @relation(fields: [student_id], references: [id])
+  assignments Assignment[]
+}
+
+model AssignmentType {
+  id         Int      @id @default(autoincrement())
+  student_id Int
+  name       String
+  is_active  Boolean  @default(true)
+  created_at DateTime @default(now())
+
+  student     Student      @relation(fields: [student_id], references: [id])
+  assignments Assignment[]
+}
+
+model Assignment {
+  id                 Int      @id @default(autoincrement())
+  course_id          Int
+  assignment_type_id Int
+  name               String
+  description        String?
+  is_completed       Boolean  @default(false)
+  due_date           DateTime @default(now())
+  created_at         DateTime @default(now())
+
+  course Course @relation(fields: [course_id], references: [id])
+  type   AssignmentType @relation(fields: [assignment_type_id], references: [id])
+}
