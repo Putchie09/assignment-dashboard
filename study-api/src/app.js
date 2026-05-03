@@ -4,6 +4,7 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 
 const authRoutes = require("./routes/auth.routes");
+const courseRoutes = require("./routes/course.routes");
 
 const app = express();
 
@@ -17,7 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 // Rutas
 
 app.use("/api/auth", authRoutes);
-
+app.use("/api/courses", courseRoutes);
 
 // Ruta de prueba
 app.get("/", (req, res) => {

@@ -92,5 +92,27 @@ const login = async (req, res) => {
   }
 };
 
+const profile = async (req, res) => {
+  try {
+    const user = await prisma.student.findUnique({
+      where: {
+        id: req.user.id,
+      },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        created_at: true,
+      },
+    });
 
-module.exports = { register, login };
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error interno",
+    });
+  }
+};
+
+
+module.exports = { register, login, profile };
